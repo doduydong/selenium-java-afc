@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="TestNG">
+
+	<groups>
+		<run>
+			<include name="user" />
+		</run>
+	</groups>
+
+	<test name="Run TestNG Groups">
+		<classes>
+			<class name="testcases.T_03_Groups" />
+		</classes>
+	</test>
+
+</suite>

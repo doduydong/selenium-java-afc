@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="TestNG">
+
+	<test name="Run TestNG Test">
+		<classes>
+			<class name="testcases.T_08_DataProvider" />
+		</classes>
+	</test>
+
+</suite>

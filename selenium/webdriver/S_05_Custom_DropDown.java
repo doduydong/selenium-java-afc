@@ -52,6 +52,17 @@ public class S_05_Custom_DropDown {
         Assert.assertEquals(driver.findElement(By.xpath("//input[@class='search']/following-sibling::div[@class='divider text']")).getText(), "Australia");
     }
 
+    @Test
+    public void TC_03_MultiSelect_DropDown() {
+        driver.get("https://demos.telerik.com/kendo-ui/multiselect/index");
+
+        String[] values = {"Cycling", "Badminton", "Swimming"};
+
+        selectOptionsInMultiSelectDropDown("//input[@role='combobox']", "//ul[@id='multiselect_listbox']/li", values);
+
+        Assert.assertTrue(verifySelectedOptionsInMultiSelectDropDown("//span[@class='k-chip-content']/span", values));
+    }
+
     @AfterClass
     public void afterClass() {
         driver.quit();
@@ -81,6 +92,43 @@ public class S_05_Custom_DropDown {
                 option.click();
                 sleepForSeconds(1);
                 break;
+            }
+        }
+    }
+
+    public void selectOptionsInMultiSelectDropDown(String dropDownXPath, String allOptionsXPath, String[] optionValues) {
+        for (String optionValue : optionValues) {
+            driver.findElement(By.xpath(dropDownXPath)).click();
+            sleepForSeconds(1);
+            List<WebElement> options = new WebDriverWait(driver, Duration.ofSeconds(30)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(allOptionsXPath)));
+            for (WebElement option : options) {
+                if (option.getText().equals(optionValue)) {
+                    option.click();
+                    sleepForSeconds(1);
+                    break;
+                }
+            }
+        }
+    }
+
+    public boolean verifySelectedOptionsInMultiSelectDropDown(String selectedOptionsXPath, String[] optionValues) {
+        List<WebElement> selectedOption = driver.findElements(By.xpath(selectedOptionsXPath));
+        if (selectedOption.size() != (optionValues == null ? 0 : optionValues.length)) {
+            System.out.println("Number of values is not correct");
+            return false;
+        } else {
+            boolean isMatch = true;
+            for (int i = 0; i < selectedOption.size(); i++) {
+                if (!selectedOption.get(i).getText().equals(optionValues[i])) {
+                    System.out.println("Expected :" + selectedOption.get(i).getText() + "\nActual   :" + optionValues[i]);
+                    isMatch = false;
+                }
+            }
+            if (isMatch) {
+                System.out.println("Actual values are equal to Expected values");
+                return true;
+            } else {
+                return false;
             }
         }
     }

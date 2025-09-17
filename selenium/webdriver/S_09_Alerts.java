@@ -90,6 +90,19 @@ public class S_09_Alerts {
         Assert.assertEquals(getResultMessage(), "You entered: " + keysToSend);
     }
 
+    @Test
+    public void TC_04_Authentication_Alert() {
+        driver.get("https://the-internet.herokuapp.com/");
+
+        String basicAuthLink = getWebElement("//a[text()='Basic Auth']").getAttribute("href");
+
+        String authLink = buildAuthUrl(basicAuthLink, "admin", "admin");
+
+        driver.get(authLink);
+
+        Assert.assertEquals(getWebElement("//h3[text()='Basic Auth']/following-sibling::p").getText(), "Congratulations! You must have the proper credentials.");
+    }
+
     @AfterClass
     public void afterClass() {
         driver.quit();
@@ -105,6 +118,11 @@ public class S_09_Alerts {
 
     public String getResultMessage() {
         return driver.findElement(By.xpath("//h4[text()='Result:']/following-sibling::p[@id='result']")).getText();
+    }
+
+    public String buildAuthUrl(String link, String userName, String password) {
+        String[] urlParts = link.split("//");
+        return urlParts[0] + "//" + userName + ":" + password + "@" + urlParts[1];
     }
 
 }
